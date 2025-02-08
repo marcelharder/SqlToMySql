@@ -1,0 +1,35 @@
+version: '3'
+services: 
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: always
+    ports:
+      - 1433:1433
+    environment:
+     MSSQL_SA_PASSWORD: example@123
+     MSSQL_PID: EXPRESS
+     ACCEPT_EULA: Y
+    networks: 
+      - internal-container-network
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+  db:
+    image: mariadb:latest
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+     MYSQL_ROOT_PASSWORD: example
+    networks: 
+      - internal-container-network
+    volumes:
+      - mariadb-data:/var/lib/mysql
+  
+ 
+volumes:
+ mariadb-data:
+ sqlserver-data:
+ sqldata:
+networks:
+ internal-container-network:
+  driver: bridge
