@@ -9,7 +9,14 @@ public class ApplicationDbContext: DbContext
                 : base(options)
             { }
 
-       public DbSet<procedure_info> Procedure_infos {get; set;}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof (ApplicationDbContext).Assembly);
+        base.OnModelCreating(modelBuilder);
+    }
+
+    public DbSet<procedure_info> Procedure_infos {get; set;}
 
 
 

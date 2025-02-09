@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using SqlToMySql.Data;
 using SqlToMySql.helpers;
+using SqlToMySql.Implementations;
 
 namespace api.Extensions
 {
@@ -18,16 +19,16 @@ namespace api.Extensions
 
 
             var serverVersion = new MariaDbServerVersion(new Version(8, 0, 34));
-            var connectionString = config.GetConnectionString("MySQLConnection");
-            
+            var connectionString = config.GetConnectionString("HofufConnection");
+
             services.AddDbContext<ApplicationDbContext>(dbContextOptions =>
                 dbContextOptions
                     .UseMySql(connectionString, serverVersion)
                     // The following three options help with debugging, but should
                     // be changed or removed for production.
                     .LogTo(Console.WriteLine, LogLevel.Information)
-            //.EnableSensitiveDataLogging()
-            //.EnableDetailedErrors()
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors()
             );
 
             /*     var _connectionString = config.GetConnectionString("MySQLConnection");
@@ -52,6 +53,14 @@ namespace api.Extensions
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<DapperContext>();
+
+            services.AddScoped<IGroningen, Groningen>();
+            services.AddScoped<IHofuf, Hofuf>();
+            services.AddScoped<IJeddah, Jeddah>();
+            services.AddScoped<IDapperSQL, DapperSQL>();
+
+
+            
 
             /*  services.AddScoped<ITokenService, TokenService>();
              services.AddScoped<IUserRepository, UserRepository>();

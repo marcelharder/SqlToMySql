@@ -8,3 +8,5 @@ global using System.Collections.ObjectModel;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.AspNetCore.Mvc;
 global using SqlToMySql.Interfaces;
+global using SqlToMySql.Data;
+global using SqlToMySql.Data.SqlEntities;

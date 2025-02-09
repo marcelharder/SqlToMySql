@@ -2,6 +2,7 @@
 {
     public class eusur_cabg
     {
+        [Key]
         public int PROCEDURE_ID { get; set; }
         public int PATIENT_ID { get; set; }
         public int CAB { get; set; }

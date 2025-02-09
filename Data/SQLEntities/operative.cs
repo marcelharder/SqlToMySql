@@ -1,7 +1,8 @@
 namespace SqlToMySql.Data.SqlEntities;
 
-﻿public class Operative
+public class Operative
 {
+    [Key]
     public int PROCEDURE_ID {get; set;}
     public int PATIENT_ID {get; set;}
     public string SURGEON_NAME {get; set;}

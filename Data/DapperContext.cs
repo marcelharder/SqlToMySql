@@ -11,7 +11,7 @@ public class DapperContext
     public DapperContext(IConfiguration configuration)
     {
         _configuration = configuration;
-        _connectionString = _configuration.GetConnectionString("MySQLConnection");
+        _connectionString = _configuration.GetConnectionString("HofufConnection");
     }
 
      public IDbConnection CreateConnection()
