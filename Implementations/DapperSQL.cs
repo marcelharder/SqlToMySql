@@ -48,10 +48,11 @@ public async Task<List<Operative>> GetListOfProcedures()
         foreach(Operative op in filteredList){
             
          //get eusur_cabg
+         var eu = new List<eusur_cabg>();
 
 
          //get procedure_info
-
+        var proc = new List<procedure_info>();
 
 
         }
