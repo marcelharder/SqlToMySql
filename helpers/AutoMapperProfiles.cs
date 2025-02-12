@@ -1,3 +1,5 @@
+using SqlToMySql.Data.models;
+
 namespace SqlToMySql.helpers;
 
     public class AutoMapperProfiles : Profile
@@ -5,7 +7,7 @@ namespace SqlToMySql.helpers;
 
         public AutoMapperProfiles()
         {
-            //CreateMap<fotoservice.data.models.Image, ImageDto>().ReverseMap();
+            CreateMap<Operative, Class_Procedure>().ForMember(dest => dest.ProcedureId, opt => opt.Ignore());
         }
 
 
