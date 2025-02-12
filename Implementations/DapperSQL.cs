@@ -44,6 +44,27 @@ public async Task<List<Operative>> GetListOfProcedures()
         var help = new List<Class_Procedure>();
         Class_Procedure cp ;
         List<Operative> filteredList = result.Where(h => h.SURGEON_NAME == "M.P. Harder").ToList();
+
+        foreach(Operative op in filteredList){
+            
+         //get eusur_cabg
+
+
+         //get procedure_info
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
         foreach(Operative x in filteredList){
             cp = new Class_Procedure
             {
