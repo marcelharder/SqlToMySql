@@ -13,7 +13,17 @@ namespace api.Extensions
             IConfiguration config
         )
         {
-           
+          var serverVersion = new MariaDbServerVersion(new Version(8, 0, 34));
+          var connectionString = config.GetConnectionString("SQLConnection");
+          services.AddDbContext<ApplicationDbContext>(
+            dbContextOptions => dbContextOptions
+                .UseMySql(connectionString, serverVersion)
+                // The following three options help with debugging, but should
+                // be changed or removed for production.
+                .LogTo(Console.WriteLine, LogLevel.Information)
+                .EnableSensitiveDataLogging()
+                .EnableDetailedErrors()
+        );
 
 
 

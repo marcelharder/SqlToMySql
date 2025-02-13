@@ -1,9 +1,21 @@
+using SqlToMySql.Data.models;
+
 namespace SqlToMySql.Implementations;
 
 public class Groningen : IGroningen
 {
-    public Task<int> changeGroningen()
+
+    private readonly ApplicationDbContext _context;
+    public Groningen(ApplicationDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
     }
+    public async Task<int> AddProcedure(Class_Procedure cp)
+    {
+        _context.procedures.Add(cp);
+        await _context.SaveChangesAsync();
+        return 1;
+    }
+
+  
 }
