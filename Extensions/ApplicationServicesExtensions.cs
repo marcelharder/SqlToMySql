@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using SqlToMySql.Data;
 using SqlToMySql.helpers;
 using SqlToMySql.Implementations;
 
@@ -23,6 +21,7 @@ namespace api.Extensions
                 .LogTo(Console.WriteLine, LogLevel.Information)
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
+                
         );
 
 
