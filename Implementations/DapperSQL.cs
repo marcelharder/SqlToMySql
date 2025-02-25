@@ -9,18 +9,16 @@ public class DapperSQL : IDapperSQL
 {
     private readonly IConfiguration _configuration;
     private readonly string _connectionString;
-    private IMapper _mapper;
-    private readonly IGroningen _gron;
+    private readonly IHofuf _hof;
 
     procedure_info p;
     eusur_operative c;
 
-    public DapperSQL(IConfiguration configuration, IMapper mapper, IGroningen gron)
+    public DapperSQL(IConfiguration configuration, IHofuf hof)
     {
         _configuration = configuration;
         _connectionString = _configuration.GetConnectionString("HofufConnection");
-        _mapper = mapper;
-        _gron = gron;
+        _hof = hof;
     }
 
     public async Task<List<Operative>> GetListOfProcedures()
@@ -59,11 +57,12 @@ public class DapperSQL : IDapperSQL
                 SelectedNurse1 = this.TranslateEmployee(h1.nurse_1),
                 SelectedNurse2 = this.TranslateEmployee(h1.nurse_2),
                 DateOfSurgery = h2.SURGERY_DATE,
+                
             };
-            
-            await _gron.AddProcedure(cp);
+            await _hof.AddProcedure(cp);
+             
         }
-        //now add the new Class_Procedure to the mariadb database
+        
 
         return 1;
     }

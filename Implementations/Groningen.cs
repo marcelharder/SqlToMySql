@@ -12,9 +12,7 @@ public class Groningen : IGroningen
     }
     public async Task<int> AddProcedure(Class_Procedure cp)
     {
-        _context.procedures.Add(cp);
-        await _context.SaveChangesAsync();
-        return 1;
+      return 1;
     }
 
   

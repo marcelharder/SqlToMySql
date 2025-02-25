@@ -16,7 +16,7 @@ public class ApplicationDbContext : IdentityDbContext<
     
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-        public DbSet<models.Class_Procedure> procedures { get; set; }
+        public DbSet<Class_Procedure> procedures { get; set; }
         public DbSet<Class_Patient> patients { get; set; }
        
 
