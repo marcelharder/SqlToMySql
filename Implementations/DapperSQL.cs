@@ -10,22 +10,25 @@ public class DapperSQL : IDapperSQL
     private readonly IConfiguration _configuration;
     private readonly string _connectionString;
     private readonly IHofuf _hof;
+    private readonly IMapper _map;
 
     procedure_info p;
     eusur_operative c;
 
-    public DapperSQL(IConfiguration configuration, IHofuf hof)
+    public DapperSQL(IConfiguration configuration, IHofuf hof, IMapper map)
     {
         _configuration = configuration;
         _connectionString = _configuration.GetConnectionString("HofufConnection");
         _hof = hof;
+        _map = map;
     }
 
     public async Task<List<Operative>> GetListOfProcedures()
     {
         _ = new List<Operative>();
         _ = new List<Class_Procedure>();
-        var query = "Select * FROM dbo.operative";
+
+        var query = "select * from hofuf.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'";
         using var connection = new SqlConnection(_connectionString);
         var documents = await connection.QueryAsync<Operative>(query);
         List<Operative> result = documents.ToList();
@@ -35,50 +38,45 @@ public class DapperSQL : IDapperSQL
 
     private async Task<int> getStuffFromOperativeAsync(List<Operative> result)
     {
-        //fiter this list on m.p. harder
         Class_Procedure cp;
-        List<Operative> filteredList = result.Where(h => h.SURGEON_NAME == "M.P. Harder").ToList();
-
-        foreach (Operative x in filteredList)
+        foreach (Operative x in result)
         {
+            //await CheckForCabg(x.PROCEDURE_ID);
             var h1 = new eusur_operative(); h1 = await this.Eusur(x.PROCEDURE_ID);
             var h2 = new procedure_info();  h2 = await this.GetProcedure(x.PROCEDURE_ID);
 
             cp = new Class_Procedure
             {
-                //copy the stuff I need from Operative
-
-                ProcedureId = x.PROCEDURE_ID,
+                hospital = 253, // is code for hofuf
                 Description = h2.fd_TYPE,
                 fdType = h2.record_id,
                 PatientId = (Int32) h2.PATIENT_ID,
-                refPhys = this.TranslateCardiologist(h2.CARDIOLOGIST),
-                SelectedSurgeon = this.TranslateEmployee(x.SURGEON_NAME),
-                SelectedResponsibleSurgeon = this.TranslateEmployee(x.RESPONSIBLE_FOR_PROC),
-                SelectedAnaesthesist = this.TranslateEmployee(h1.anaesthesist),
-                SelectedPerfusionist = this.TranslateEmployee(h1.perfusionist),
-                SelectedAssistant = this.TranslateEmployee(x.ASSISTANT_SURGEON),
-                SelectedNurse1 = this.TranslateEmployee(h1.nurse_1),
-                SelectedNurse2 = this.TranslateEmployee(h1.nurse_2),
+                refPhys = TranslateCardiologist(h2.CARDIOLOGIST),
+                SelectedSurgeon = TranslateEmployee(x.SURGEON_NAME),
+                SelectedResponsibleSurgeon = TranslateEmployee(x.RESPONSIBLE_FOR_PROC),
+                SelectedAnaesthesist = TranslateEmployee(h1.anaesthesist),
+                SelectedPerfusionist = TranslateEmployee(h1.perfusionist),
+                SelectedAssistant = TranslateEmployee(x.ASSISTANT_SURGEON),
+                SelectedNurse1 = TranslateEmployee(h1.nurse_1),
+                SelectedNurse2 = TranslateEmployee(h1.nurse_2),
                 DateOfSurgery = h2.SURGERY_DATE,
                 
             };
             await _hof.AddProcedure(cp);
-             
         }
         
 
         return 1;
     }
 
-    private int TranslateEmployee(string test)
+    private static int TranslateEmployee(string test)
     {
         var help = 5;
 
         return help;
     }
 
-      private int TranslateCardiologist(string test)
+      private static int TranslateCardiologist(string test)
     {
        var help = 99;
        if(test == "Ayman Al Kholeifi"){help = 2;}
@@ -87,6 +85,24 @@ public class DapperSQL : IDapperSQL
         
 
         return help;
+    }
+
+    private async Task<int> CheckForCabg(int procedureId){ // is there a cabg record than copy this rocord to trac
+        var query3 = "Select * FROM dbo.eusur_cabg where PROCEDURE_ID = @id";
+        using var connection3 = new SqlConnection(_connectionString);
+        var selected_op = await connection3.QueryAsync<eusur_cabg>(
+            query3,
+            new { id = procedureId }
+        );
+        if(selected_op.First() != null){
+            CopyCabgToTrac(selected_op.First());
+        };
+       return 2;
+    }
+
+    private void CopyCabgToTrac(eusur_cabg ec)
+    {
+        _hof.AddCabg(_map.Map<Class_CABG>(ec));
     }
 
     private async Task<procedure_info> GetProcedure(int Procedureid)

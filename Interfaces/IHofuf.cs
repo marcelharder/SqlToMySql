@@ -5,4 +5,5 @@ namespace SqlToMySql.Interfaces;
 public interface IHofuf{
     Task<int> ChangeHofuf();
     Task<int> AddProcedure(Class_Procedure cp);
+     Task<int> AddCabg(Class_CABG cp);
 }

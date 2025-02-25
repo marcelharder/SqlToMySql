@@ -16,10 +16,12 @@ public class ApplicationDbContext : IdentityDbContext<
     
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
-        public DbSet<Class_Procedure> procedures { get; set; }
-        public DbSet<Class_Patient> patients { get; set; }
+        public DbSet<Class_Procedure> Procedures { get; set; }
+        public DbSet<Class_Patient> Patients { get; set; }
+        public DbSet<Class_CABG> Cabgs { get; set; }
+        public DbSet<Class_Valve> Valves { get; set; }
+        public DbSet<Class_Aortic_Surgery> Aosurgeries { get; set; }
        
-
 
 
         protected override void OnModelCreating(ModelBuilder builder)
