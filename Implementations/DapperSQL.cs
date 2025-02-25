@@ -49,6 +49,10 @@ public class DapperSQL : IDapperSQL
                 //copy the stuff I need from Operative
 
                 ProcedureId = x.PROCEDURE_ID,
+                Description = h2.fd_TYPE,
+                fdType = h2.record_id,
+                PatientId = (Int32) h2.PATIENT_ID,
+                refPhys = this.TranslateCardiologist(h2.CARDIOLOGIST),
                 SelectedSurgeon = this.TranslateEmployee(x.SURGEON_NAME),
                 SelectedResponsibleSurgeon = this.TranslateEmployee(x.RESPONSIBLE_FOR_PROC),
                 SelectedAnaesthesist = this.TranslateEmployee(h1.anaesthesist),
@@ -70,6 +74,17 @@ public class DapperSQL : IDapperSQL
     private int TranslateEmployee(string test)
     {
         var help = 5;
+
+        return help;
+    }
+
+      private int TranslateCardiologist(string test)
+    {
+       var help = 99;
+       if(test == "Ayman Al Kholeifi"){help = 2;}
+       if(test == "Abdullah Al Jubour"){help = 3;}
+       if(test == "Abdullah Ghabashi"){help = 4;}
+        
 
         return help;
     }
