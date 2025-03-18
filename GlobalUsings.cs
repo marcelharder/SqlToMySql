@@ -11,3 +11,6 @@ global using SqlToMySql.Interfaces;
 global using SqlToMySql.Data;
 global using SqlToMySql.Data.SqlEntities;
 global using Microsoft.EntityFrameworkCore;
+global using Dapper;
+global using Microsoft.Data.SqlClient;
+global using SqlToMySql.Data.models;

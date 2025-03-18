@@ -1,8 +1,3 @@
-using System.Linq;
-using Dapper;
-using Microsoft.Data.SqlClient;
-using SqlToMySql.Data.models;
-
 namespace SqlToMySql.Implementations;
 
 public class DapperSQL : IDapperSQL
@@ -44,7 +39,7 @@ public class DapperSQL : IDapperSQL
         return result;
     }
 
-    private async Task<int> getStuffFromOperativeAsync(List<Operative> result)
+    private async Task<int> GetStuffFromOperativeAsync(List<Operative> result)
     {
         Class_Procedure cp;
         foreach (Operative x in result)
@@ -152,16 +147,12 @@ public class DapperSQL : IDapperSQL
         using var connection2 = new SqlConnection(_connectionString);
         var selected_op = await connection2.QueryAsync<Cpb>(query2, new { id = Procedureid });
          if(selected_op.Any()){
-            this.cpb = selected_op.FirstOrDefault();
+            cpb = selected_op.FirstOrDefault();
             return 1;
             }
          else{
             return 2;
          }
-
-        
-
-        
     }
 
     public async Task<int> CheckForCabg()
@@ -170,7 +161,7 @@ public class DapperSQL : IDapperSQL
         list = await _hof.GetListOfProcedures();
         foreach (Class_Procedure cp in list)
         {
-            await FindCabg(cp.SelectedNurse2);
+            await FindCabg(cp.SelectedNurse2); // procedureId is temporarily put in SelectedNurse2
         }
         return 1;
     }
@@ -203,9 +194,10 @@ public class DapperSQL : IDapperSQL
             clcpb.PROCEDURE_ID = procedureId;
             clcpb.cpb_used = ChangeOneToYes(this.eucpb.cpb_used);
 
-            if (await GetCpb(procedureId) != 2)
+            if (await GetCpb(procedureId) != 2) // store the cpb in a local variable
             {
                 clcpb.INFUSION_MODE_ANTE = ChangeOneToYes(cpb.INFUSION_MODE_ANTE);
+
             }
             await _hof.AddCPB(clcpb);
         }

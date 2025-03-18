@@ -23,7 +23,7 @@ public class HofufController : ControllerBase
     public async Task<IActionResult> GoC()
     {
        var result = await _dap.CheckForCabg();
-       if(result == null){return BadRequest("foutje");}
+       if(result == 2){return BadRequest("foutje");}
 
        return Ok(result);
     }
@@ -32,7 +32,7 @@ public class HofufController : ControllerBase
     public async Task<IActionResult> GoCPB()
     {
        var result = await _dap.CheckForCPB();
-       if(result == null){return BadRequest("foutje");}
+       if(result == 2){return BadRequest("foutje");}
 
        return Ok(result);
     }
