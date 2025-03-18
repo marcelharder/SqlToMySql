@@ -35,41 +35,80 @@ public class DapperSQL : IDapperSQL
          {
              await CheckForCabg(s.PROCEDURE_ID);
          } */
-        var ts = await getStuffFromOperativeAsync(result);
+        foreach (Operative x in result)
+        {
+            await GetProceduresAsync(x);
+        }
+
         return result;
     }
 
-    private async Task<int> GetStuffFromOperativeAsync(List<Operative> result)
+    private async Task<int> GetProceduresAsync(Operative x)
     {
         Class_Procedure cp;
-        foreach (Operative x in result)
-        {
-            var h1 = new eusur_operative();
-            h1 = await this.Eusur(x.PROCEDURE_ID);
-            var h2 = new procedure_info();
-            h2 = await this.GetProcedure(x.PROCEDURE_ID);
+        var h1 = new eusur_operative();
+        h1 = await this.Eusur(x.PROCEDURE_ID);
+        var h2 = new procedure_info();
+        h2 = await this.GetProcedure(x.PROCEDURE_ID);
 
-            cp = new Class_Procedure
-            {
-                hospital = 253, // is code for hofuf
-                Description = h2.fd_TYPE,
-                fdType = h2.record_id,
-                PatientId = (Int32)h2.PATIENT_ID,
-                refPhys = TranslateCardiologist(h2.CARDIOLOGIST),
-                SelectedSurgeon = TranslateEmployee(x.SURGEON_NAME),
-                SelectedResponsibleSurgeon = TranslateEmployee(x.RESPONSIBLE_FOR_PROC),
-                SelectedAnaesthesist = TranslateEmployee(h1.anaesthesist),
-                SelectedPerfusionist = TranslateEmployee(h1.perfusionist),
-                SelectedAssistant = TranslateEmployee(x.ASSISTANT_SURGEON),
-                SelectedNurse1 = TranslateEmployee(h1.nurse_1),
-                SelectedNurse2 = x.PROCEDURE_ID,
-                DateOfSurgery = h2.SURGERY_DATE,
-            };
-            await _hof.AddProcedure(cp);
-        }
+        cp = new Class_Procedure
+        {
+            hospital = 253, // is code for hofuf
+            Description = h2.fd_TYPE,
+            fdType = h2.record_id,
+            PatientId = (Int32)h2.PATIENT_ID,
+            refPhys = TranslateCardiologist(h2.CARDIOLOGIST),
+            SelectedSurgeon = TranslateEmployee(x.SURGEON_NAME),
+            SelectedResponsibleSurgeon = TranslateEmployee(x.RESPONSIBLE_FOR_PROC),
+            SelectedAnaesthesist = TranslateEmployee(h1.anaesthesist),
+            SelectedPerfusionist = TranslateEmployee(h1.perfusionist),
+            SelectedAssistant = TranslateEmployee(x.ASSISTANT_SURGEON),
+            SelectedNurse1 = TranslateEmployee(h1.nurse_1),
+            SelectedNurse2 = x.PROCEDURE_ID,
+            DateOfSurgery = h2.SURGERY_DATE,
+        };
+        await _hof.AddProcedure(cp);
+
+        // use the patient_id to fill Patients
+        FillPatients(cp.PatientId);
+
+        // use the procedure_id to fill CPB
+        Class_CPB cpbnew;
+        _ = new Cpb();
+        Cpb h3 = await GetCpb(x.PROCEDURE_ID);
+        _ = new eusur_cpb();
+        eusur_cpb h4 = await GetEusurCPB(x.PROCEDURE_ID);
+        cpbnew = new Class_CPB
+        {
+            PROCEDURE_ID = x.PROCEDURE_ID,
+            CROSS_CLAMP_TIME = h3.CROSS_CLAMP_TIME,
+            PERFUSION_TIME = h3.PERFUSION_TIME,
+            LOWEST_CORE_TEMP = h3.LOWEST_CORE_TEMP,
+            CARDIOPLEGIA = h3.CARDIOPLEGIA,
+            CARDIOPLEGIA_TYPE = (h3.CARDIOPLEGIA_BLOOD == "1") ? "2" : "1",
+            INFUSION_MODE_ANTE = h3.INFUSION_MODE_ANTE.ToString(),
+            INFUSION_MODE_RETRO = 0,
+            INFUSION_DOSE_INT = h3.INFUSION_DOSE_INT,
+            INFUSION_DOSE_CONT = h3.INFUSION_DOSE_CONT,
+            CARDIOPLEGIA_TEMP_COLD = h3.CARDIOPLEGIA_TEMP_COLD,
+            CARDIOPLEGIA_TEMP_WARM = h3.CARDIOPLEGIA_TEMP_WARM,
+            IABP = h3.IABP,
+            IABP_DATE = h4.IABP_DATE,
+            IABP_IND = h3.IABP_IND.ToString(),
+            IABP_OPTIONS = h3.IABP_OPTIONS.ToString(),
+            
+        };
+
+        await _hof.AddCPB(cpbnew);
+
+        // use the procedure_id to fill CABG
+
+        await FindCabg(x.PROCEDURE_ID);
 
         return 1;
     }
+
+    private void FillPatients(int PatientId) { }
 
     private static int TranslateEmployee(string test)
     {
@@ -140,31 +179,32 @@ public class DapperSQL : IDapperSQL
         return this.c;
     }
 
-    private async Task<int> GetCpb(int Procedureid)
+    private async Task<Cpb> GetCpb(int Procedureid)
     {
         //get cpb
         var query2 = "select * from cpb o where o.PROCEDURE_ID = @id";
         using var connection2 = new SqlConnection(_connectionString);
         var selected_op = await connection2.QueryAsync<Cpb>(query2, new { id = Procedureid });
-         if(selected_op.Any()){
-            cpb = selected_op.FirstOrDefault();
-            return 1;
-            }
-         else{
-            return 2;
-         }
+        if (selected_op.Any())
+        {
+            return selected_op.FirstOrDefault();
+        }
+        else
+        {
+            return null;
+        }
     }
 
-    public async Task<int> CheckForCabg()
-    {
-        var list = new List<Class_Procedure>();
-        list = await _hof.GetListOfProcedures();
-        foreach (Class_Procedure cp in list)
-        {
-            await FindCabg(cp.SelectedNurse2); // procedureId is temporarily put in SelectedNurse2
-        }
-        return 1;
-    }
+    /*  public async Task<int> CheckForCabg()
+     {
+         var list = new List<Class_Procedure>();
+         list = await _hof.GetListOfProcedures();
+         foreach (Class_Procedure cp in list)
+         {
+             await FindCabg(cp.SelectedNurse2); // procedureId is temporarily put in SelectedNurse2
+         }
+         return 1;
+     } */
 
     public async Task<int> CheckForCPB()
     {
@@ -178,31 +218,18 @@ public class DapperSQL : IDapperSQL
         return 1;
     }
 
-    private async Task<int> FindCPB(int procedureId)
+    private async Task<eusur_cpb> GetEusurCPB(int procedureId)
     {
-        Class_CPB clcpb;
-       
         var query4 = "select * from eusur_cpb o where o.PROCEDURE_ID = @id";
         using var connection = new SqlConnection(_connectionString);
         var result = await connection.QueryAsync<eusur_cpb>(query4, new { id = procedureId });
 
         if (result.Any())
         {
-            this.eucpb = result.FirstOrDefault();
-            clcpb = new Class_CPB { };
-            // get the stuff from eusur_cpb nu
-            clcpb.PROCEDURE_ID = procedureId;
-            clcpb.cpb_used = ChangeOneToYes(this.eucpb.cpb_used);
-
-            if (await GetCpb(procedureId) != 2) // store the cpb in a local variable
-            {
-                clcpb.INFUSION_MODE_ANTE = ChangeOneToYes(cpb.INFUSION_MODE_ANTE);
-
-            }
-            await _hof.AddCPB(clcpb);
+            return result.FirstOrDefault();
         }
-
-        return 1;
+        else
+            return null;
     }
 
     private static string ChangeOneToYes(int test)
