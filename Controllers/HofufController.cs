@@ -19,21 +19,5 @@ public class HofufController : ControllerBase
 
        return Ok(result);
     }
-    [HttpGet("CheckCabg")]
-    public async Task<IActionResult> GoC()
-    {
-       var result = await _dap.CheckForCabg();
-       if(result == 2){return BadRequest("foutje");}
-
-       return Ok(result);
-    }
-
-    [HttpGet("CheckCPB")]
-    public async Task<IActionResult> GoCPB()
-    {
-       var result = await _dap.CheckForCPB();
-       if(result == 2){return BadRequest("foutje");}
-
-       return Ok(result);
-    }
+   
 }

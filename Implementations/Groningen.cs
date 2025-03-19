@@ -10,10 +10,9 @@ public class Groningen : IGroningen
     {
         _context = context;
     }
-    public async Task<int> AddProcedure(Class_Procedure cp)
-    {
-      return 1;
-    }
 
-  
+    public Task<int> AddProcedure(Class_Procedure cp)
+    {
+        throw new NotImplementedException();
+    }
 }

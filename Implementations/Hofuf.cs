@@ -46,4 +46,11 @@ public class Hofuf : IHofuf
         await _context.SaveChangesAsync();
         return 1;
     }
+
+    public async Task<int> AddPatient(Class_Patient patient)
+    {
+        _context.Add(patient);
+        await _context.SaveChangesAsync();
+        return 1;
+    }
 }
