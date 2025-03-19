@@ -71,13 +71,14 @@ public class DapperSQL : IDapperSQL
 
         // use the patient_id to fill Patients
         Class_Patient patient;
-        // the data for the patient table comes from 4 tables
+        // the data for the patient table comes from 5 tables
 
         var h5 = new Euroscore(); h5 = await this.GetEuroScore(x.PROCEDURE_ID);
         var h6 = new patient_history(); h6 = await this.GetPatientHistory((int)h2.PATIENT_ID);
         var h7 = new eusur_history(); h7 = await this.GetEusurHistory((int)h2.PATIENT_ID);
         var h8 = new Patient_demographics(); h8 = await this.GetPatient_Demographics((int)h2.PATIENT_ID);
-
+       // var h9 = new Cath(); h9 = await this.GetPatient_Demographics((int)h2.PATIENT_ID);
+      
         patient = new Class_Patient{
             MRN = "",
             EuroScoreNo = 0,
@@ -92,7 +93,12 @@ public class DapperSQL : IDapperSQL
             IsPreviousIntervention = h7.IsPreviousInterventions.ToString(),
             copd = h7.COPD,
             active_endocarditis = h6.RF_INFECTIOUS_ENDOCARD_TYPE.ToString(),
-            critical_preoperative_state = h7.
+            critical_preoperative_state = determineCriticalState(),
+            diabetes_on_insulin = (h6.RF_DIABETES_CONTROL == "1") ? "1" : "2",
+            NYHA = h7.DYSPNEA_NYHA.ToString(),
+            CCS = h6.CS_CLASS_CCS,
+            LVEF = 
+
 
 
 
@@ -181,6 +187,11 @@ public class DapperSQL : IDapperSQL
         await GetCabg(x.PROCEDURE_ID);
 
         return 1;
+    }
+
+    private bool determineCriticalState()
+    {
+        throw new NotImplementedException();
     }
 
     private void FillPatients(int PatientId) { }
