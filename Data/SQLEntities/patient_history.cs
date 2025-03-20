@@ -44,7 +44,7 @@ namespace SqlToMySql.Data.SqlEntities
     public string CS_CARDIOGENIC_SHOCK {get; set;}
     public int CS_CARDIO_SHOCK_TYPE {get; set;}      
     public string CS_RESUSCITATION {get; set;}
-    public string CS_ARRHYTHMIAp {get; set;}
+    public string CS_ARRHYTHMIA {get; set;}
     public int CS_ARRHYTHMIA_TYPE {get; set;}        
     public string CS_ARR_VENT {get; set;}
     public string CS_ARR_AV_BLOCK {get; set;}
