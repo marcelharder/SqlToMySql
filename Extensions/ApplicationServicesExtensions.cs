@@ -29,9 +29,9 @@ namespace api.Extensions
 
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSingleton<DapperContext>();
-            services.AddSingleton<General>();
-            services.AddSingleton<ComposeCPB>();
-            services.AddSingleton<ComposePatient>();
+            services.AddScoped<General>();
+            services.AddScoped<ComposeCPB>();
+            services.AddScoped<ComposePatient>();
 
             services.AddScoped<IGroningen, Groningen>();
             services.AddScoped<IHofuf, Hofuf>();
