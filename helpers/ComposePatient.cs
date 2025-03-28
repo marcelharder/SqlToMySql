@@ -5,13 +5,14 @@ public class ComposePatient{
     private readonly string _connectionString;
     private readonly IHofuf _hof;
     Critical_preop_state cps;
-    readonly General _gen;
+    private readonly General _gen;
     
    
     
-    public ComposePatient(IHofuf hofuf, IConfiguration configuration)
+    public ComposePatient(IHofuf hofuf, IConfiguration configuration, General gen)
     {
         _hof = hofuf;
+        _gen = gen;
         _configuration = configuration;
         _connectionString = _configuration.GetConnectionString("HofufConnection");
         

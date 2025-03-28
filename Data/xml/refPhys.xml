@@ -3,84 +3,68 @@
 		<id>124</id>
 		<hospital_id>253</hospital_id>
 		<name>Ayman Al Kholeifi</name>
-		<image>
-		</image>
-		<address>
-		</address>
-		<street>
-		</street>
-		<postcode>
-		</postcode>
-		<city>
-		</city>
-		<state>
-		</state>
+		<image></image>
+		<address></address>
+		<street></street>
+		<postcode></postcode>
+		<city></city>
+		<state></state>
 		<country>KSA</country>
-		<tel>
-		</tel>
-		<fax>
-		</fax>
-		<email>
-		</email>
-		<send_email>
-		</send_email>
-		<active>
-		</active>
+		<tel></tel>
+		<fax></fax>
+		<email></email>
+		<send_email></send_email>
+		<active></active>
 	</item>
     <item>
 		<id>125</id>
 		<hospital_id>253</hospital_id>
 		<name>Abdullah Al Jubour</name>
-		<image>
-		</image>
-		<address>
-		</address>
-		<street>
-		</street>
-		<postcode>
-		</postcode>
-		<city>
-		</city>
-		<state>
-		</state>
+		<image></image>
+		<address></address>
+		<street></street>
+		<postcode></postcode>
+		<city></city>
+		<state></state>
 		<country>KSA</country>
-		<tel>
-		</tel>
-		<fax>
-		</fax>
-		<email>
-		</email>
-		<send_email>
-		</send_email>
-		<active>
-		</active>
+		<tel></tel>
+		<fax></fax>
+		<email></email>
+		<send_email></send_email>
+		<active></active>
 	</item>
-    <item>
+	<item>
 		<id>126</id>
 		<hospital_id>253</hospital_id>
 		<name>Abdullah Ghabashi</name>
-		<image>
-		</image>
-		<address>
-		</address>
-		<street>
-		</street>
-		<postcode>
-		</postcode>
-		<city>
-		</city>
-		<state>
-		</state>
+		<image></image>
+		<address></address>
+		<street></street>
+		<postcode></postcode>
+		<city></city>
+		<state></state>
 		<country>KSA</country>
-		<tel>
-		</tel>
-		<fax>
-		</fax>
-		<email>
-		</email>
-		<send_email>
-		</send_email>
-		<active>
-		</active>
+		<tel></tel>
+		<fax></fax>
+		<email></email>
+		<send_email></send_email>
+		<active></active>
+	</item>
+	<item>
+		<id>125</id>
+		<hospital_id>253</hospital_id>
+		<name>Dr. Abdullah Al Jabor</name>
+		<image></image>
+		<address></address>
+		<street></street>
+		<postcode></postcode>
+		<city></city>
+		<state></state>
+		<country>KSA</country>
+		<tel></tel>
+		<fax></fax>
+		<email></email>
+		<send_email></send_email>
+		<active></active>
 	</item>
 </root>

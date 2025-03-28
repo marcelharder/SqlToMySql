@@ -24,7 +24,7 @@ public class ApplicationDbContext : IdentityDbContext<
         public DbSet<Class_minInv> MinInvs { get; set; }
         public DbSet<Class_CPB> CPBS { get; set; }
         public DbSet<Class_PostOp> PostOps { get; set; }
-       
+              
 
 
         protected override void OnModelCreating(ModelBuilder builder)

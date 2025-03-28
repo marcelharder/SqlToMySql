@@ -1,3 +1,5 @@
+using SqlToMySql.Data.SqlEntities;
+using SqlToMySql.Data.SQLEntities;
 using SqlToMySql.helpers;
 
 namespace SqlToMySql.Implementations;
@@ -12,14 +14,19 @@ public class DapperSQL : IDapperSQL
     private readonly ComposeCPB _cpb;
     private readonly ComposePatient _cp;
 
-    Critical_preop_state cps;
+   
     procedure_info p;
     eusur_operative c;
-    Cpb cpb;
-    eusur_cabg ca;
-    eusur_cpb eucpb;
+    Queen_support queen_Support;
 
-    public DapperSQL(IConfiguration configuration, IHofuf hof, IMapper map, General gen, ComposeCPB cpb, ComposePatient cp)
+    public DapperSQL(
+        IConfiguration configuration,
+        IHofuf hof,
+        IMapper map,
+        General gen,
+        ComposeCPB cpb,
+        ComposePatient cp
+    )
     {
         _configuration = configuration;
         _connectionString = _configuration.GetConnectionString("HofufConnection");
@@ -59,6 +66,8 @@ public class DapperSQL : IDapperSQL
         eusur_operative h1 = await Eusur(x.PROCEDURE_ID);
         _ = new procedure_info();
         procedure_info h2 = await GetProcedure(x.PROCEDURE_ID);
+        _ = new Queen_support();
+        Queen_support h3 = await Get_Queen_support(x.PROCEDURE_ID);
 
         cp = new Class_Procedure
         {
@@ -75,21 +84,56 @@ public class DapperSQL : IDapperSQL
             SelectedNurse1 = TranslateEmployee(h1.nurse_1),
             SelectedNurse2 = x.PROCEDURE_ID,
             DateOfSurgery = h2.SURGERY_DATE,
+            SelectedTiming = GetProcedureTiming(h1),
+            SelectedUrgentTiming = x.STATUS_URGENT,
+            SelectedEmergencyTiming = x.STATUS_URGENT,
+            SelectedStartHr = h1.Skin_incision_start_hr,
+            SelectedStartMin = h1.Skin_incision_start_min,
+            SelectedStopHr = h1.Skin_incision_stop_hr,
+            SelectedStopMin = h1.Skin_incision_stop_min,
+            TotalTime = h1.Total_time,
+            SelectedInotropes = Convert.ToInt32(h3.INOTR),
+            SelectedPacemaker = Convert.ToInt32(h3.PACEMAKER),
+            SelectedPleura = Convert.ToInt32(h3.PLEURA),
+            Comment1 = h3.COMMENT_A,
+            Comment2 = h3.COMMENT_B,
+            Comment3 = h3.COMMENT_C,
         };
         await _hof.AddProcedure(cp);
 
         await _cpb.AddCPBAsync(x.PROCEDURE_ID);
-        await _cp.AddPatientAsync(x.PROCEDURE_ID, (int) h2.PATIENT_ID, h2.record_id);
+        await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
         await GetCabg(x.PROCEDURE_ID);
+        await GetValve(x.PROCEDURE_ID);
 
         return 1;
     }
 
-   
-
     private int TranslateEmployee(string test)
     {
         int help = Convert.ToInt32(_gen.GetEmployeeId(test));
+        return help;
+    }
+
+    private static int GetProcedureTiming(eusur_operative op)
+    {
+        var help = 0;
+        if (op.status_el == "1")
+        {
+            help = 1;
+        }
+        if (op.status_ur == "1")
+        {
+            help = 2;
+        }
+        if (op.status_em == "1")
+        {
+            help = 3;
+        }
+        if (op.status_salvage == "1")
+        {
+            help = 4;
+        }
         return help;
     }
 
@@ -111,6 +155,23 @@ public class DapperSQL : IDapperSQL
             ca = new Class_CABG { };
             ca = _map.Map<Class_CABG>(result.First());
             await _hof.AddCabg(ca);
+        }
+
+        return 1;
+    }
+
+    private async Task<int> GetValve(int procedureId)
+    {
+        Class_Valve va;
+        var query4 = "select * from valves o where o.PROCEDURE_ID = @id";
+        using var connection = new SqlConnection(_connectionString);
+        var result = await connection.QueryAsync<Valves>(query4, new { id = procedureId });
+
+        if (result != null)
+        {
+            va = new Class_Valve { };
+            va = _map.Map<Class_Valve>(result.First());
+            await _hof.AddValve(va);
         }
 
         return 1;
@@ -142,6 +203,16 @@ public class DapperSQL : IDapperSQL
         return this.c;
     }
 
-    
-    
+    private async Task<Queen_support> Get_Queen_support(int ProcedureId)
+    {
+        //get eusur_operative
+        var query2 = "Select * FROM dbo.queen_support where PROCEDURE_ID = @id";
+        using var connection2 = new SqlConnection(_connectionString);
+        var selected_op = await connection2.QueryAsync<Queen_support>(
+            query2,
+            new { id = ProcedureId }
+        );
+        this.queen_Support = selected_op.First();
+        return this.queen_Support;
+    }
 }

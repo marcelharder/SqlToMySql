@@ -5,7 +5,7 @@ namespace SqlToMySql.helpers;
 
 public class General{
 
-    private readonly XElement _el;
+    //private readonly XElement _el;
     private readonly IWebHostEnvironment _env;
     private readonly string test;
     private readonly string refPhysPath;
@@ -15,8 +15,8 @@ public class General{
         _env = env;
         var content = _env.ContentRootPath;
         var filename = "Data/xml/procedure.xml";
-        var refPhysXml = "Data/xml/procedure.xml";
-        var empXml = "Data/xml/procedure.xml";
+        var refPhysXml = "Data/xml/refPhys.xml";
+        var empXml = "Data/xml/employee.xml";
         test = Path.Combine(content, filename);
         refPhysPath = Path.Combine(content, refPhysXml);
         empPath = Path.Combine(content, empXml);
