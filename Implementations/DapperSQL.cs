@@ -87,29 +87,15 @@ public class DapperSQL : IDapperSQL
 
    
 
-    private static int TranslateEmployee(string test)
+    private int TranslateEmployee(string test)
     {
-        var help = 5;
-
+        int help = Convert.ToInt32(_gen.GetEmployeeId(test));
         return help;
     }
 
-    private static int TranslateCardiologist(string test)
+    private int TranslateCardiologist(string test)
     {
-        var help = 99;
-        if (test == "Ayman Al Kholeifi")
-        {
-            help = 2;
-        }
-        if (test == "Abdullah Al Jubour")
-        {
-            help = 3;
-        }
-        if (test == "Abdullah Ghabashi")
-        {
-            help = 4;
-        }
-
+        int help = Convert.ToInt32(_gen.GetRefPhysId(test));
         return help;
     }
 

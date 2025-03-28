@@ -1,0 +1,22 @@
+<root>
+	<item>
+		<id>
+		</id>
+		<name>
+		</name>
+		<image>
+		</image>
+		<profession>
+		</profession>
+		<user_name>
+		</user_name>
+		<password>
+		</password>
+		<liscense_to_kill>
+		</liscense_to_kill>
+		<selected_hospital_id>
+		</selected_hospital_id>
+		<active>
+		</active>
+	</item>
+</root>
