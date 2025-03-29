@@ -13,6 +13,9 @@ namespace SqlToMySql.helpers;
             CreateMap<eusur_cabg, Class_CABG>().ForMember(dest => dest.Id, opt => opt.Ignore());
 
             CreateMap<Valves, Class_Valve>().ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<Operative, Class_minInv>().ForMember(dest => dest.Id, opt => opt.Ignore());
+     
         }
 
 

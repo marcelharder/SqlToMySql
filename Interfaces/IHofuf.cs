@@ -10,5 +10,6 @@ public interface IHofuf
     Task<int> AddCabg(Class_CABG cp);
     Task<int> AddCPB(Class_CPB cp);
     Task<int> AddValve(Class_Valve cp);
+    Task<int> AddMinInv(Class_minInv cp);
     Task<List<Class_Procedure>> GetListOfProcedures();
 }
