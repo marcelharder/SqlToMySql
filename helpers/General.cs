@@ -42,9 +42,11 @@ public class General{
         var result = (from t in element.Elements("item")
                      where t.Element("name").Value == refName
                      select t).SingleOrDefault();
-
-        help = result.Element("id").Value;
-        return help;
+        if(result != null){
+            help = result.Element("id").Value;
+            return help;}
+        else {return help;}
+        
     }
     public string GetEmployeeId(string refName){
         var help = "0";
@@ -55,7 +57,9 @@ public class General{
                      where t.Element("name").Value == refName
                      select t).SingleOrDefault();
 
-        help = result.Element("id").Value;
-        return help;
+         if(result != null){
+            help = result.Element("id").Value;
+            return help;}
+        else {return help;}
     }
 }
