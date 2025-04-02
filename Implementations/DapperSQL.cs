@@ -14,7 +14,7 @@ public class DapperSQL : IDapperSQL
     private readonly ComposeCPB _cpb;
     private readonly ComposePatient _cp;
 
-   
+
     procedure_info p;
     eusur_operative c;
     Queen_support queen_Support;
@@ -99,11 +99,14 @@ public class DapperSQL : IDapperSQL
 
         await _cpb.AddCPBAsync(x.PROCEDURE_ID);
         await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
-        await GetCabg(x.PROCEDURE_ID);
-        await GetValve(x.PROCEDURE_ID);
+        await AddCabg(x.PROCEDURE_ID);
+        await AddValve(x.PROCEDURE_ID);
+        await AddMinInv(x);
 
         return 1;
     }
+
+
 
     private int TranslateEmployee(string test)
     {
@@ -139,7 +142,16 @@ public class DapperSQL : IDapperSQL
         return help;
     }
 
-    private async Task<int> GetCabg(int procedureId)
+    private async Task<int> AddMinInv(Operative x)
+    {
+        Class_minInv cmin;
+        _ = new Class_minInv { };
+        cmin = _map.Map<Class_minInv>(x);
+        await _hof.AddMinInv(cmin);
+        return 1;
+    }
+
+    private async Task<int> AddCabg(int procedureId)
     {
         Class_CABG ca;
         var query4 = "select * from eusur_cabg o where o.PROCEDURE_ID = @id";
@@ -156,7 +168,7 @@ public class DapperSQL : IDapperSQL
         return 1;
     }
 
-    private async Task<int> GetValve(int procedureId)
+    private async Task<int> AddValve(int procedureId)
     {
         Class_Valve va;
         var query4 = "select * from valves o where o.PROCEDURE_ID = @id";
@@ -211,4 +223,6 @@ public class DapperSQL : IDapperSQL
         this.queen_Support = selected_op.First();
         return this.queen_Support;
     }
+
+
 }
