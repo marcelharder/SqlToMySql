@@ -42,8 +42,8 @@ public class DapperSQL : IDapperSQL
         _ = new List<Operative>();
         _ = new List<Class_Procedure>();
 
-        var query =
-            "select * from hofuf.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'";
+        //var query ="select * from hofuf.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'";
+        var query ="select * from hofuf.dbo.operative";
         using var connection = new SqlConnection(_connectionString);
         var documents = await connection.QueryAsync<Operative>(query);
         List<Operative> result = documents.ToList();
@@ -58,6 +58,7 @@ public class DapperSQL : IDapperSQL
     private async Task<int> GetProceduresAsync(Operative x)
     {
         Class_Procedure cp;
+        
         _ = new eusur_operative();
         eusur_operative h1 = await Eusur(x.PROCEDURE_ID);
         _ = new procedure_info();
@@ -71,6 +72,7 @@ public class DapperSQL : IDapperSQL
             Description = h2.fd_TYPE,
             fdType = h2.record_id,
             PatientId = (Int32)h2.PATIENT_ID,
+            ProcedureId = x.PROCEDURE_ID,
             refPhys = TranslateCardiologist(h2.CARDIOLOGIST),
             SelectedSurgeon = TranslateEmployee(x.SURGEON_NAME),
             SelectedResponsibleSurgeon = TranslateEmployee(x.RESPONSIBLE_FOR_PROC),
@@ -78,7 +80,7 @@ public class DapperSQL : IDapperSQL
             SelectedPerfusionist = TranslateEmployee(h1.perfusionist),
             SelectedAssistant = TranslateEmployee(x.ASSISTANT_SURGEON),
             SelectedNurse1 = TranslateEmployee(h1.nurse_1),
-            SelectedNurse2 = x.PROCEDURE_ID,
+            SelectedNurse2 = TranslateEmployee(h1.nurse_2),
             DateOfSurgery = h2.SURGERY_DATE,
             SelectedTiming = GetProcedureTiming(h1),
             SelectedUrgentTiming = x.STATUS_URGENT,
@@ -97,11 +99,11 @@ public class DapperSQL : IDapperSQL
         };
         await _hof.AddProcedure(cp);
 
-        await _cpb.AddCPBAsync(x.PROCEDURE_ID);
-        await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
-        await AddCabg(x.PROCEDURE_ID);
-        await AddValve(x.PROCEDURE_ID);
-        await AddMinInv(x);
+      //  await _cpb.AddCPBAsync(x.PROCEDURE_ID);
+      //  await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
+      //  await AddCabg(x.PROCEDURE_ID);
+      // await AddValve(x.PROCEDURE_ID);
+      //  await AddMinInv(x);
 
         return 1;
     }

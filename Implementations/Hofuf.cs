@@ -60,4 +60,11 @@ public class Hofuf : IHofuf
         await _context.SaveChangesAsync();
         return 1;
     }
+
+    public async Task<int> AddMinInv(Class_minInv cp)
+    {
+         _context.Add(cp);
+        await _context.SaveChangesAsync();
+        return 1;
+    }
 }
