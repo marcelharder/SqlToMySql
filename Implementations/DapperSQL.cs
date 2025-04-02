@@ -47,10 +47,6 @@ public class DapperSQL : IDapperSQL
         using var connection = new SqlConnection(_connectionString);
         var documents = await connection.QueryAsync<Operative>(query);
         List<Operative> result = documents.ToList();
-        /*  foreach (Operative s in result)
-         {
-             await CheckForCabg(s.PROCEDURE_ID);
-         } */
         foreach (Operative x in result)
         {
             await GetProceduresAsync(x);
