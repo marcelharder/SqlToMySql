@@ -12,4 +12,5 @@ public interface IHofuf
     Task<int> AddValve(Class_Valve cp);
     Task<int> AddMinInv(Class_minInv cp);
     Task<List<Class_Procedure>> GetListOfProcedures();
+    Task<string> AddPreviewOpReport(Class_Preview_Operative_Report cp);
 }

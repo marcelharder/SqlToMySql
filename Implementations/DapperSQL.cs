@@ -1,3 +1,4 @@
+using System.Linq;
 using SqlToMySql.Data.SqlEntities;
 using SqlToMySql.Data.SQLEntities;
 using SqlToMySql.helpers;
@@ -13,7 +14,6 @@ public class DapperSQL : IDapperSQL
     private readonly IMapper _map;
     private readonly ComposeCPB _cpb;
     private readonly ComposePatient _cp;
-
 
     procedure_info p;
     eusur_operative c;
@@ -43,7 +43,7 @@ public class DapperSQL : IDapperSQL
         _ = new List<Class_Procedure>();
 
         //var query ="select * from hofuf.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'";
-        var query ="select * from hofuf.dbo.operative";
+        var query = "select * from hofuf.dbo.operative";
         using var connection = new SqlConnection(_connectionString);
         var documents = await connection.QueryAsync<Operative>(query);
         List<Operative> result = documents.ToList();
@@ -58,7 +58,8 @@ public class DapperSQL : IDapperSQL
     private async Task<int> GetProceduresAsync(Operative x)
     {
         Class_Procedure cp;
-        
+        Class_Preview_Operative_Report pvo;
+
         _ = new eusur_operative();
         eusur_operative h1 = await Eusur(x.PROCEDURE_ID);
         _ = new procedure_info();
@@ -99,16 +100,80 @@ public class DapperSQL : IDapperSQL
         };
         await _hof.AddProcedure(cp);
 
-      //  await _cpb.AddCPBAsync(x.PROCEDURE_ID);
-      //  await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
-      //  await AddCabg(x.PROCEDURE_ID);
-      // await AddValve(x.PROCEDURE_ID);
-      //  await AddMinInv(x);
+        pvo = new Class_Preview_Operative_Report
+        {
+            Id = 0,
+            procedure_id = x.PROCEDURE_ID,
+            regel_1 = "",
+            regel_2 = "",
+            regel_3 = "",
+            regel_4 = "",
+            regel_5 = "",
+            regel_6 = "",
+            regel_7 = "",
+            regel_8 = "",
+            regel_9 = "",
+            regel_10 = "",
+            regel_11 = "",
+            regel_12 = "",
+            regel_13 = ""
+        };
+        foreach (string line in GetSpreadOutFreeText(25, h1.free_text))
+        {
+            pvo.regel_1 = line[0].ToString();
+            pvo.regel_2 = line[1].ToString();
+            pvo.regel_3 = line[2].ToString();
+            pvo.regel_4 = line[3].ToString();
+            pvo.regel_5 = line[4].ToString();
+            pvo.regel_6 = line[5].ToString();
+            pvo.regel_7 = line[6].ToString();
+            pvo.regel_8 = line[7].ToString();
+            pvo.regel_9 = line[8].ToString();
+            pvo.regel_10 = line[9].ToString();
+            pvo.regel_11 = line[10].ToString();
+            pvo.regel_12 = line[11].ToString();
+            pvo.regel_13 = line[12].ToString();
+        }
+        await _hof.AddPreviewOpReport(pvo);
+
+        //  await _cpb.AddCPBAsync(x.PROCEDURE_ID);
+        //  await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
+        //  await AddCabg(x.PROCEDURE_ID);
+        // await AddValve(x.PROCEDURE_ID);
+        //  await AddMinInv(x);
 
         return 1;
     }
 
+    private static IEnumerable<string> GetSpreadOutFreeText(int maxLineLength, string sentence)
+    {
+        var words = sentence.Split(' ');
+        var currentLine = new List<string>();
+        var currentLength = 0;
 
+        foreach (var word in words)
+        {
+            if (currentLength + word.Length + 1 > maxLineLength)
+            {
+                yield return string.Join(" ", currentLine);
+                currentLine.Clear();
+                currentLength = 0;
+            }
+
+            currentLine.Add(word);
+            currentLength += word.Length + 1; // Account for space
+        }
+
+        if (currentLine.Count > 0)
+        {
+            yield return string.Join(" ", currentLine);
+        }
+    }
+
+    private void checkLength(int v, string free_text)
+    {
+        throw new NotImplementedException();
+    }
 
     private int TranslateEmployee(string test)
     {
@@ -225,6 +290,4 @@ public class DapperSQL : IDapperSQL
         this.queen_Support = selected_op.First();
         return this.queen_Support;
     }
-
-
 }
