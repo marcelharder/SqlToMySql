@@ -68,7 +68,7 @@ public class Hofuf : IHofuf
         return 1;
     }
 
-    public async Task<int> AddPreviewOpReport(Class_Preview_Operative_Report cp)
+    public async Task<int> AddPreviewOpReport(Class_Preview_Operative_report cp)
     {
          _context.Add(cp);
         await _context.SaveChangesAsync();

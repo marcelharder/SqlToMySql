@@ -1,6 +1,6 @@
 namespace SqlToMySql.Data.models
 {
- public class Class_Preview_Operative_Report
+ public class Class_Preview_Operative_report
     {
         [Key]
         public int Id { get; set; }

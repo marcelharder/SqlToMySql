@@ -58,7 +58,8 @@ public class DapperSQL : IDapperSQL
     private async Task<int> GetProceduresAsync(Operative x)
     {
         Class_Procedure cp;
-        Class_Preview_Operative_Report pvo;
+        Class_Preview_Operative_report pvo;
+        var l = new List<string>();
 
         _ = new eusur_operative();
         eusur_operative h1 = await Eusur(x.PROCEDURE_ID);
@@ -100,7 +101,7 @@ public class DapperSQL : IDapperSQL
         };
         await _hof.AddProcedure(cp);
 
-        pvo = new Class_Preview_Operative_Report
+        pvo = new Class_Preview_Operative_report
         {
             Id = 0,
             procedure_id = x.PROCEDURE_ID,
@@ -118,24 +119,119 @@ public class DapperSQL : IDapperSQL
             regel_12 = "",
             regel_13 = ""
         };
-        foreach (string line in GetSpreadOutFreeText(25, h1.free_text))
+       
+        if(h1.free_text.Length > 0){
+        foreach (string line in GetSpreadOutFreeText(75, h1.free_text))
         {
-            pvo.regel_1 = line[0].ToString();
-            pvo.regel_2 = line[1].ToString();
-            pvo.regel_3 = line[2].ToString();
-            pvo.regel_4 = line[3].ToString();
-            pvo.regel_5 = line[4].ToString();
-            pvo.regel_6 = line[5].ToString();
-            pvo.regel_7 = line[6].ToString();
-            pvo.regel_8 = line[7].ToString();
-            pvo.regel_9 = line[8].ToString();
-            pvo.regel_10 = line[9].ToString();
-            pvo.regel_11 = line[10].ToString();
-            pvo.regel_12 = line[11].ToString();
-            pvo.regel_13 = line[12].ToString();
-        }
-        await _hof.AddPreviewOpReport(pvo);
+            l.Add(line);
+            switch(l.Count)
+                {
+                case 1:  pvo.regel_1 = l[0];break;
+                case 2:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];break;
+                case 3:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2];break;
+                case 4:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];break;
+                case 5:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];break;
+                case 6:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];break;
+                case 7:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];
+                         pvo.regel_7 = l[6];break;
+                case 8:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];
+                         pvo.regel_7 = l[6];
+                         pvo.regel_8 = l[7];break;
+                case 9:  pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];
+                         pvo.regel_7 = l[6];
+                         pvo.regel_8 = l[7];
+                         pvo.regel_9 = l[8];break;
+                case 10: pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];
+                         pvo.regel_7 = l[6];
+                         pvo.regel_8 = l[7];
+                         pvo.regel_9 = l[8];
+                         pvo.regel_10 = l[9];break;
+         
+                case 11: pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];
+                         pvo.regel_7 = l[6];
+                         pvo.regel_8 = l[7];
+                         pvo.regel_9 = l[8];
+                         pvo.regel_10 = l[9];
+                         pvo.regel_11 = l[10];break;
 
+           case 12:      pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];
+                         pvo.regel_7 = l[6];
+                         pvo.regel_8 = l[7];
+                         pvo.regel_9 = l[8];
+                         pvo.regel_10 = l[9];
+                         pvo.regel_11 = l[10];
+                         pvo.regel_12 = l[11];break;
+
+           case 13:      pvo.regel_1 = l[0];
+                         pvo.regel_2 = l[1];
+                         pvo.regel_3 = l[2]; 
+                         pvo.regel_4 = l[3];
+                         pvo.regel_5 = l[4];
+                         pvo.regel_6 = l[5];
+                         pvo.regel_7 = l[6];
+                         pvo.regel_8 = l[7];
+                         pvo.regel_9 = l[8];
+                         pvo.regel_10 = l[9];
+                         pvo.regel_11 = l[10];
+                         pvo.regel_12 = l[11];
+                         pvo.regel_13 = l[12];break;
+         
+         
+         
+         
+         
+            }
+
+          
+          }
+        
+        await _hof.AddPreviewOpReport(pvo);
+        }
         //  await _cpb.AddCPBAsync(x.PROCEDURE_ID);
         //  await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
         //  await AddCabg(x.PROCEDURE_ID);
