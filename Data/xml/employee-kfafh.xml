@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+<item>
+		<id>48</id>
+		<name>Yousef Abu-Emran</name>
+		<image></image>
+		<profession>anaesthesia</profession>
+		<user_name></user_name>
+		<password></password>
+		<liscense_to_kill>1</liscense_to_kill>
+		<selected_hospital_id>34</selected_hospital_id>
+		<active></active>
+	</item>
+    <item>
+		<id>45</id>
+		<name>A. Ashmeg</name>
+		<image></image>
+		<profession>surgeon</profession>
+		<user_name></user_name>
+		<password></password>
+		<liscense_to_kill>1</liscense_to_kill>
+		<selected_hospital_id>34</selected_hospital_id>
+		<active></active>
+	</item>
+    <item>
+		<id>14</id>
+		<name>M.P. Harder</name>
+		<image></image>
+		<profession>surgeon</profession>
+		<user_name></user_name>
+		<password></password>
+		<liscense_to_kill>1</liscense_to_kill>
+		<selected_hospital_id>34</selected_hospital_id>
+		<active></active>
+	</item>
+</root>
