@@ -38,7 +38,6 @@ namespace api.Extensions
             services.AddScoped<IJeddah, Jeddah>();
             services.AddScoped<IDapperSQL, DapperSQL>();
 
-
             
 
             services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);

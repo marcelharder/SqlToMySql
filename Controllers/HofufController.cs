@@ -11,13 +11,17 @@ public class HofufController : ControllerBase
         _dap = dap;
     }
     
-    [HttpGet]
-    public async Task<IActionResult> Go()
+    [HttpGet ("Go/{hospital_id}")]                
+    public async Task<IActionResult> Go(int hospital_id)
     {
-       var result = await _dap.GetListOfProcedures();
-       if(result == null){return BadRequest("foutje");}
+        await _dap.CheckSurgeons(hospital_id);
+        await _dap.CheckEmployeesAsync(hospital_id);
 
-       return Ok(result);
-    }
+        var result = await _dap.GetListOfProcedures(hospital_id);
+        if (result == null) { return BadRequest("foutje"); }
+
+        return Ok(result);
+    }                                   
+    
    
 }

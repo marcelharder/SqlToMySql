@@ -74,4 +74,39 @@ public class Hofuf : IHofuf
         await _context.SaveChangesAsync();
         return 1;
     }
+
+    public async Task<int> GetListOfEmployees(int id)
+    {
+        var result = await _context.Employees.FromSqlRaw("SELECT * FROM Employees WHERE selected_hospital_id = " + id ).ToListAsync();
+        return result.Count;
+    }
+
+    public async Task<int> GetListOfUsers(int id)
+    {
+        var result = await _context.Users.FromSqlRaw("SELECT * FROM AspNetUsers WHERE hospital_id = " + id).ToListAsync();
+        return result.Count;
+    }
+
+    public async Task<int> AddEmployee(Class_Employee employee)
+    {
+         _context.Add(employee);
+        await _context.SaveChangesAsync();
+        return 1;
+    }
+    public async Task<int>AddSurgeon(AppUser surgeon)
+    {
+         _context.Add(surgeon);
+        await _context.SaveChangesAsync();
+        return 1;
+    }
+
+    public async Task<int> GetNumberOfProcedure()
+    {
+        var result = await _context.Procedures.ToListAsync();
+        if (result == null)
+        {
+            return 0;
+        }
+        return result.Count;
+    }
 }

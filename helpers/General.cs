@@ -62,4 +62,41 @@ public class General{
             return help;}
         else {return help;}
     }
+
+    public List<AppUser> GetSurgeonsFromXml(int hospital_id)
+    {
+        XElement element = XElement.Load(empPath);
+
+        var result = (from t in element.Elements("item")
+                      where t.Element("selected_hospital_id").Value == hospital_id.ToString() &&
+                            t.Element("profession").Value == "surgeon"
+                      select new AppUser
+                      {
+                          UserName = t.Element("name").Value,
+                          worked_in = t.Element("selected_hospital_id").Value
+                          
+
+                      }).ToList();
+        return result;
+    }
+
+    public List<Class_Employee> GetEmployeesFromXml(int hospital_id)
+    {
+        XElement element = XElement.Load(empPath);
+
+        var result = (from t in element.Elements("item")
+                      where t.Element("hospital_id").Value == hospital_id.ToString() 
+                      select new Class_Employee
+                      {
+                          profession = t.Element("profession").Value,
+                          selected_hospital_id = t.Element("hospital_id").Value,
+                          Id = int.Parse(t.Element("id").Value),
+                          image = t.Element("image").Value,   
+                          liscense_to_kill = t.Element("liscense_to_kill").Value,
+                          name = t.Element("name").Value,
+                          password = t.Element("password").Value,
+                          active = bool.Parse(t.Element("active").Value)
+                      }).ToList();
+        return result;
+    }
 }
