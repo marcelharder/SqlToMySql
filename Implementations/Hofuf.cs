@@ -15,8 +15,8 @@ public class Hofuf : IHofuf
         _context = context;
     }
 
-    public async Task<List<Class_Procedure>> GetListOfProcedures(){
-        var result = await _context.Procedures.ToListAsync();
+    public async Task<List<Class_Procedure>> GetListOfProcedures(int id){
+        var result = await _context.Procedures.FromSqlRaw("SELECT * FROM Procedures WHERE hospital = " + id ).ToListAsync();
         return result;
     }
 

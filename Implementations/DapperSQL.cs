@@ -45,7 +45,7 @@ public class DapperSQL : IDapperSQL
 
     public async Task<List<Operative>> GetListOfProcedures(int hospital_id)
     {
-        if (is_mariadb_procedure_empty())
+        if (await Is_mariadb_procedure_empty(hospital_id))
         {
             _ = new List<Operative>();
             _ = new List<Class_Procedure>();
@@ -72,10 +72,27 @@ public class DapperSQL : IDapperSQL
         return null;
     }
 
-    private bool is_mariadb_procedure_empty()
+    private async Task<bool> Is_mariadb_procedure_empty(int hospital_id)
     {
+        // Check if the procedures table is empty for the given hospital_id
+        if (hospital_id == 253)
+        {
+            if((await _hof.GetListOfProcedures(hospital_id)).Count == 0) 
+            {
+                return true;
+            }
+        }
+        else if (hospital_id == 34)
+        {
+             if((await _hof.GetListOfProcedures(hospital_id)).Count == 0) 
+            {
+                return true;
+            }
+        }
+        // Add more hospitals as needed
         return false;
     }
+    
 
     private async Task<int> GetProceduresAsync(Operative x)
     {
