@@ -1,5 +1,3 @@
-using SqlToMySql.Data.models;
-
 namespace SqlToMySql.Implementations;
 
 public class Groningen : IGroningen

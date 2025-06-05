@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+
 using SqlToMySql.Data.models;
 
 namespace SqlToMySql.Data;

@@ -1,5 +1,3 @@
-using SqlToMySql.Data.models;
-
 namespace SqlToMySql.Interfaces;
 
 public interface IHofuf
