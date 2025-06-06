@@ -61,10 +61,14 @@ public class DapperSQL : IDapperSQL
             {
                 await GetProceduresAsync(x);
             }
-
             return result;
+        } else {
+            // If the procedures table is not empty, return null
+            // This indicates that the procedures have already been processed
+            // and there is no need to reprocess them.
+            return null;
         }
-        return null;
+        
     }
 
     private async Task<bool> Is_mariadb_procedure_empty(int hospital_id)
@@ -328,7 +332,7 @@ public class DapperSQL : IDapperSQL
 
     private int TranslateEmployee(string test)
     {
-        int help = Convert.ToInt32(_gen.GetEmployeeId(test));
+        int help = Convert.ToInt32(_gen.GetEmployeeIdAsync(test));
         return help;
     }
 
@@ -471,7 +475,7 @@ public class DapperSQL : IDapperSQL
                 if (existingUser != null)
                 {
                     // add this hospital_id to worked_in
-                    existingUser.worked_in += $",{surgeon.hospital_id}";
+                    existingUser.worked_in += $",{hospital_id}";
                 }
                 else
                 {
@@ -479,8 +483,8 @@ public class DapperSQL : IDapperSQL
                     surgeon.UserName = surgeon.UserName.Trim(); // Ensure no leading/trailing spaces
                     surgeon.Created = DateTime.Now; // Set Created date
                     surgeon.LastActive = DateTime.Now; // Set LastActive date
-                    surgeon.active = true; // Set active status
-                    surgeon.ltk = false; // Set ltk status
+                    surgeon.active = 1; // Set active status
+                    //surgeon.ltk = 0; // Set ltk status
                     surgeon.PasswordSalt = Array.Empty<byte>(); // Initialize PasswordSalt
                     surgeon.PhotoUrl = ""; // Set PhotoUrl to empty string
 

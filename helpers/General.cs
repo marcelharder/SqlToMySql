@@ -10,8 +10,12 @@ public class General{
     private readonly string test;
     private readonly string refPhysPath;
     private readonly string empPath;
-    public General(IWebHostEnvironment env)
+    private readonly IConfiguration _configuration;
+    private readonly string _connectionString;
+    public General(IWebHostEnvironment env, IConfiguration configuration)
     {
+        _configuration = configuration;
+        _connectionString = _configuration.GetConnectionString("HofufConnection");
         _env = env;
         var content = _env.ContentRootPath;
         var filename = "Data/xml/procedure.xml";
@@ -20,8 +24,8 @@ public class General{
         test = Path.Combine(content, filename);
         refPhysPath = Path.Combine(content, refPhysXml);
         empPath = Path.Combine(content, empXml);
-        
     }
+    
     public string GetWeightOfProcedure(int record_id){
         var help = "0";
         
@@ -48,24 +52,17 @@ public class General{
         else {return help;}
         
     }
-    public string GetEmployeeId(string refName){
-        var help = "0";
-        
-         XElement element = XElement.Load(empPath);
-
-        var result = (from t in element.Elements("item")
-                     where t.Element("name").Value == refName
-                     select t).SingleOrDefault();
-
-         if(result != null){
-            help = result.Element("id").Value;
-            return help;}
-        else {return help;}
-    }
+    public async Task<string> GetEmployeeIdAsync(string refName){ // get this from the hofuf database
+        var query = "SELECT id FROM AspNetUsers WHERE UserName = @refName";
+        using var connection = new SqlConnection(_connectionString);
+        var id = await connection.QueryAsync<string>(query, refName);
+        return id.FirstOrDefault();
+     }
 
     public List<AppUser> GetSurgeonsFromXml(int hospital_id)
     {
         XElement element = XElement.Load(empPath);
+        var help = "";
 
         var result = (from t in element.Elements("item")
                       where t.Element("selected_hospital_id").Value == hospital_id.ToString() &&
@@ -73,8 +70,8 @@ public class General{
                       select new AppUser
                       {
                           UserName = t.Element("name").Value,
-                          worked_in = t.Element("selected_hospital_id").Value
-                          
+                          worked_in = t.Element("selected_hospital_id").Value,
+                          ltk = int.Parse(t.Element("liscense_to_kill").Value)                          
 
                       }).ToList();
         return result;
@@ -85,17 +82,17 @@ public class General{
         XElement element = XElement.Load(empPath);
 
         var result = (from t in element.Elements("item")
-                      where t.Element("hospital_id").Value == hospital_id.ToString() 
+                      where t.Element("selected_hospital_id").Value == hospital_id.ToString() &&
+                            t.Element("profession").Value != "surgeon"
                       select new Class_Employee
                       {
                           profession = t.Element("profession").Value,
-                          selected_hospital_id = t.Element("hospital_id").Value,
+                          selected_hospital_id = t.Element("selected_hospital_id").Value,
                           Id = int.Parse(t.Element("id").Value),
                           image = t.Element("image").Value,   
                           liscense_to_kill = t.Element("liscense_to_kill").Value,
                           name = t.Element("name").Value,
-                          password = t.Element("password").Value,
-                          active = bool.Parse(t.Element("active").Value)
+                          password = t.Element("password").Value
                       }).ToList();
         return result;
     }

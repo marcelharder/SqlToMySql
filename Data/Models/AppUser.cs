@@ -21,8 +21,8 @@ namespace SqlToMySql.Data.models
         public string IBAN { get; set; }
         public string Mobile { get; set; }
         public string Country { get; set; }
-        public bool active { get; set; }
-        public bool ltk { get; set; }
+        public int active { get; set; }
+        public int ltk { get; set; }
         
     }
 

@@ -28,7 +28,7 @@ public class GeneralController : ControllerBase
     }
     [HttpGet("getEmployeeID/{name}")]
     public IActionResult GetEmployee(string name){
-        var r = _gen.GetEmployeeId(name); 
+        var r = _gen.GetEmployeeIdAsync(name); 
         return Ok(r);
 
     }
