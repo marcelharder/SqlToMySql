@@ -88,7 +88,6 @@ public class General{
                       {
                           profession = t.Element("profession").Value,
                           selected_hospital_id = t.Element("selected_hospital_id").Value,
-                          Id = int.Parse(t.Element("id").Value),
                           image = t.Element("image").Value,   
                           liscense_to_kill = t.Element("liscense_to_kill").Value,
                           name = t.Element("name").Value,

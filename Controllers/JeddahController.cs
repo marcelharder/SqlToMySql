@@ -15,7 +15,7 @@ public class JeddahController : ControllerBase
     public async Task<IActionResult> Go()
     {
         await _dap.CheckSurgeons(34);
-      //  await _dap.CheckEmployeesAsync(34);
+        await _dap.CheckEmployeesAsync(34);
 
        /*  var result = await _dap.GetListOfProcedures(34);
         if (result == null)

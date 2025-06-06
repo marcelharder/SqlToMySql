@@ -49,9 +49,11 @@ public class DapperSQL : IDapperSQL
             string query = hospital_id switch
             {
                 // Hofuf
-                253 => "select * from hofuf.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'",
+                253
+                    => "select * from hofuf.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'",
                 // kfafh
-                34 => "select * from ecsur_kfafh.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'",
+                34
+                    => "select * from ecsur_kfafh.dbo.operative o where o.SURGEON_NAME = 'M.P. Harder' or o.ASSISTANT_SURGEON = 'M.P. Harder'",
                 _ => throw new ArgumentException("Invalid hospital_id"),
             };
             using var connection = new SqlConnection(_connectionString);
@@ -62,13 +64,14 @@ public class DapperSQL : IDapperSQL
                 await GetProceduresAsync(x);
             }
             return result;
-        } else {
+        }
+        else
+        {
             // If the procedures table is not empty, return null
             // This indicates that the procedures have already been processed
             // and there is no need to reprocess them.
             return null;
         }
-        
     }
 
     private async Task<bool> Is_mariadb_procedure_empty(int hospital_id)
@@ -76,14 +79,14 @@ public class DapperSQL : IDapperSQL
         // Check if the procedures table is empty for the given hospital_id
         if (hospital_id == 253)
         {
-            if((await _hof.GetListOfProcedures(hospital_id)).Count == 0) 
+            if ((await _hof.GetListOfProcedures(hospital_id)).Count == 0)
             {
                 return true;
             }
         }
         else if (hospital_id == 34)
         {
-             if((await _hof.GetListOfProcedures(hospital_id)).Count == 0) 
+            if ((await _hof.GetListOfProcedures(hospital_id)).Count == 0)
             {
                 return true;
             }
@@ -91,7 +94,6 @@ public class DapperSQL : IDapperSQL
         // Add more hospitals as needed
         return false;
     }
-    
 
     private async Task<int> GetProceduresAsync(Operative x)
     {
@@ -521,10 +523,13 @@ public class DapperSQL : IDapperSQL
         {
             // Add the surgeons from the xml file to the database
             var employees = _gen.GetEmployeesFromXml(hospital_id);
+
             foreach (var emp in employees)
             {
-                await _hof.AddEmployee(emp);
-            }
+                emp.name = emp.name.Trim(); // Ensure no leading/trailing spaces
+                var existingUser = await _manager.FindByNameAsync(emp.name);
+                if (existingUser == null) { await _hof.AddEmployee(emp);}
+           }
         }
     }
 }
