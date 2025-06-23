@@ -17,11 +17,12 @@ public class HofufController : ControllerBase
         await _dap.CheckSurgeons(253);
         await _dap.CheckEmployeesAsync(253);
 
-        var result = await _dap.GetListOfProcedures(253);
+        var result = new  List<Operative>();
+
+       // result = await _dap.GetListOfProcedures(253);
         if (result == null) { return BadRequest("foutje"); }
 
         return Ok(result);
-    }                                   
-    
-   
+    }
+
 }

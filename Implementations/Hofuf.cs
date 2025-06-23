@@ -89,13 +89,22 @@ public class Hofuf : IHofuf
 
     public async Task<int> AddEmployee(Class_Employee employee)
     {
-         _context.Add(employee);
+        if (employee == null)
+        {
+            throw new ArgumentNullException(nameof(employee));
+        }
+         employee.active = true; // Ensure the employee is active by default
+        _context.Add(employee);
         await _context.SaveChangesAsync();
         return 1;
     }
     public async Task<int>AddSurgeon(AppUser surgeon)
     {
-         _context.Add(surgeon);
+        if (surgeon == null)
+        {
+            throw new ArgumentNullException(nameof(surgeon));
+        }
+        _context.Add(surgeon);
         await _context.SaveChangesAsync();
         return 1;
     }
