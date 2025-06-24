@@ -61,7 +61,7 @@ public class DapperSQL : IDapperSQL
             List<Operative> result = documents.ToList();
             foreach (Operative x in result)
             {
-                await GetProceduresAsync(x);
+                await GetProceduresAsync(x, hospital_id);
             }
             return result;
         }
@@ -95,7 +95,7 @@ public class DapperSQL : IDapperSQL
         return false;
     }
 
-    private async Task<int> GetProceduresAsync(Operative x)
+    private async Task<int> GetProceduresAsync(Operative x, int hospital_id)
     {
         Class_Procedure cp;
         Class_Preview_Operative_report pvo;
@@ -110,7 +110,7 @@ public class DapperSQL : IDapperSQL
 
         cp = new Class_Procedure
         {
-            hospital = 253, // is code for hofuf
+            hospital = hospital_id,
             Description = h2.fd_TYPE,
             fdType = h2.record_id,
             PatientId = (Int32)h2.PATIENT_ID,
@@ -293,10 +293,10 @@ public class DapperSQL : IDapperSQL
             await _hof.AddPreviewOpReport(pvo);
         }
 
-        //  await _cpb.AddCPBAsync(x.PROCEDURE_ID);
+        await _cpb.AddCPBAsync(x.PROCEDURE_ID);
         //  await _cp.AddPatientAsync(x.PROCEDURE_ID, (int)h2.PATIENT_ID, h2.record_id);
         //  await AddCabg(x.PROCEDURE_ID);
-        // await AddValve(x.PROCEDURE_ID);
+        //  await AddValve(x.PROCEDURE_ID);
         //  await AddMinInv(x);
 
         return 1;
