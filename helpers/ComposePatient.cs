@@ -83,7 +83,7 @@ public class ComposePatient{
             crit_renal_failure = cps.Crit_renal_failure,
             crit_pacemaker = cps.Crit_pacemaker,
             critical_preoperative_state = DetermineCriticalState(cps),
-            log_score = "0"
+            log_score = h5.log_score
         };
 
         await _hof.AddPatient(patient);

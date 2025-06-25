@@ -1,6 +1,3 @@
-using System.Xml.Linq;
-using System.Xml.XPath;
-
 namespace SqlToMySql.helpers;
 
 public class ComposeCPB{
@@ -14,7 +11,6 @@ public class ComposeCPB{
         _hof = hofuf;
         _configuration = configuration;
         _connectionString = _configuration.GetConnectionString("HofufConnection");
-        
     }
 
     public async Task<int> AddCPBAsync(int Procedureid){
